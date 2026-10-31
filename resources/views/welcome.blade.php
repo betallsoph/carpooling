@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Carpooling VN — Đi làm chung xe, chia đôi tiền xăng</title>
-    <meta name="description" content="Nền tảng chia sẻ chuyến đi làm tuyến cố định cho dân văn phòng. Tiết kiệm tiền xăng, văn minh, đúng quy định pháp luật.">
+    <title>Carpooling VN — Rủ nhau đi làm chung, tiện đường thì ghép xe</title>
+    <meta name="description" content="Nền tảng kết nối dân văn phòng đi làm cùng đường. Không giao dịch tiền nong trên app, tiền xăng tùy lòng với chủ xe.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -335,6 +335,10 @@
             background-color: var(--color-primary-lighter);
         }
 
+        .chip-green {
+            background-color: #DCFCE7;
+        }
+
         /* Grid */
         .grid-2 {
             display: grid;
@@ -352,39 +356,7 @@
             }
         }
 
-        /* Form elements */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            margin-bottom: 1rem;
-        }
-
-        label {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #18181B;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            border-radius: 6px;
-            border: 2px solid #000000;
-            background-color: #FFFFFF;
-            padding: 0.65rem 0.85rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            font-family: inherit;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            box-shadow: 0 0 0 2px var(--color-primary-blue);
-        }
-
+        /* Stop Card */
         .route-stop {
             display: flex;
             align-items: flex-start;
@@ -436,68 +408,51 @@
 
         .sql-kw { color: #F43F5E; font-weight: 700; }
         .sql-fn { color: #38BDF8; font-weight: 600; }
-        .sql-str { color: #34D399; }
 
-        /* VietQR box */
-        .qr-card-content {
+        /* Etiquette checklist box */
+        .etiquette-card {
             padding: 1.5rem;
         }
 
-        .vietqr-box {
+        .rule-item {
             display: flex;
-            gap: 1.25rem;
+            gap: 0.75rem;
+            align-items: flex-start;
+            padding: 0.85rem 0;
+            border-bottom: 1px dashed #D4D4D8;
+        }
+
+        .rule-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .rule-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid #000000;
+            background: var(--color-primary-blue);
+            display: flex;
             align-items: center;
-            padding: 1rem;
-            border-radius: 6px;
-            border: 2px solid #000000;
-            background-color: #FFFFFF;
-            box-shadow: var(--shadow-primary);
-            margin-bottom: 1.25rem;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
-        .vietqr-img {
-            width: 95px;
-            height: 95px;
-            border: 2px solid #000000;
-            border-radius: 6px;
-            padding: 4px;
-            background: #FFFFFF;
-        }
-
-        .qr-meta-title {
-            font-size: 0.95rem;
+        .rule-title {
+            font-size: 0.875rem;
             font-weight: 800;
             margin-bottom: 0.2rem;
         }
 
-        .qr-meta-sub {
-            font-size: 0.75rem;
-            color: #52525B;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
-
-        .amount-highlight {
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: #059669;
-        }
-
-        .cost-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.4rem 0;
+        .rule-desc {
             font-size: 0.8rem;
-            font-weight: 600;
-            border-bottom: 1px dashed #D4D4D8;
-        }
-
-        .cost-row:last-child {
-            border-bottom: none;
-            padding-top: 0.75rem;
-            font-size: 0.9rem;
-            font-weight: 800;
+            color: #52525B;
+            line-height: 1.45;
+            font-weight: 500;
         }
 
         /* SVG Icons */
@@ -536,6 +491,11 @@
             border-radius: 4px;
             border: 1.5px solid #000000;
             background: var(--color-primary-blue);
+        }
+
+        .badge-green {
+            background-color: #DCFCE7;
+            color: #15803D;
         }
     </style>
 </head>
@@ -583,41 +543,41 @@
                 <span>Tuyến thí điểm số 1: Bình Dương (Thủ Dầu Một) ➔ Quận 1 (TP.HCM)</span>
             </div>
 
-            <h1>Đi làm chung xe,<br>chia đôi tiền xăng.</h1>
+            <h1>Tiện đường thì đi chung,<br>tiền xăng tùy lòng.</h1>
 
             <p class="hero-desc">
-                Sáng đi làm, chiều đi về cùng một trục đường thì rủ nhau đi chung một xe. Vừa tiết kiệm tiền hơn đi taxi,
-                vừa nhàn đầu hơn phải tự lái xe máy qua mấy ngã tư kẹt xe mỗi ngày. Tiền xăng cộ và vé cầu đường chia đều, 
-                chuyển khoản trực tiếp cho tài xế qua VietQR.
+                Cùng đi làm sáng chiều trên một trục đường thì rủ nhau đi chung xe cho đỡ buồn ngủ và đỡ kẹt xe. 
+                Nền tảng <strong>không thu bất kỳ đồng phí nào</strong> và <strong>không giao dịch tiền trên app</strong>. 
+                Tiền xăng cộ hay cà phê ăn sáng hai bên tự tính với nhau, tùy lòng cảm ơn chủ xe.
             </p>
 
             <div class="tech-chips">
+                <div class="chip chip-green">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                    <span>100% Phi thương mại</span>
+                </div>
                 <div class="chip chip-blue">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-                    <span>Laravel 13.39</span>
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                    <span>Ghép hành lang PostGIS</span>
                 </div>
                 <div class="chip">
-                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                    <span>PostgreSQL PostGIS</span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    <span>Laravel 13</span>
                 </div>
                 <div class="chip">
                     <svg class="icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg>
-                    <span>Filament 5.11</span>
+                    <span>Filament 5</span>
                 </div>
                 <div class="chip">
-                    <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
-                    <span>VietQR NAPAS 247</span>
-                </div>
-                <div class="chip">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    <span>Nghị định 218/2026</span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Cộng đồng đi làm văn phòng</span>
                 </div>
             </div>
         </section>
 
-        <!-- Main Interactive Grid -->
+        <!-- Main Grid -->
         <div class="grid-2">
-            <!-- Left Card: PostGIS Corridor Matching Interactive Window -->
+            <!-- Left Card: PostGIS Corridor Matching Window -->
             <div class="roomio-window">
                 <div class="roomio-window-bar">
                     <div class="roomio-window-dots">
@@ -631,14 +591,14 @@
 
                 <div style="padding: 1.5rem;">
                     <p style="font-size: 0.875rem; color: #3F3F46; line-height: 1.5; margin-bottom: 1.25rem;">
-                        Chủ xe đã đăng sẵn lịch trình đi làm sáng T2–T6. Khi khách tìm xe, hệ thống dùng <strong>PostGIS</strong> 
-                        quét dọc trục đường xe chạy (bán kính lệch ≤ 2km) và tự động nhận diện chiều xe đi.
+                        Chủ xe đăng lịch trình đi làm cố định sáng T2–T6. Khi bạn tìm xe, hệ thống dùng <strong>PostGIS</strong> 
+                        quét dọc trục đường xe chạy (độ lệch ≤ 2km) và kiểm tra đúng chiều xe đi để kết nối hai người.
                     </p>
 
                     <div class="route-stop">
                         <div class="stop-badge" style="background-color: #E0E7FF; color: #4338CA;">A</div>
                         <div>
-                            <div class="stop-title">Điểm đón khách (Pickup)</div>
+                            <div class="stop-title">Điểm đón của bạn (Pickup)</div>
                             <div class="stop-addr">Lotte Mart Bình Dương (Đại lộ Bình Dương, Thuận An)</div>
                         </div>
                     </div>
@@ -646,14 +606,14 @@
                     <div class="route-stop">
                         <div class="stop-badge" style="background-color: #DCFCE7; color: #15803D;">B</div>
                         <div>
-                            <div class="stop-title">Điểm trả khách (Dropoff)</div>
-                            <div class="stop-addr">Ngã tư Hàng Xanh (Điện Biên Phủ, Bình Thạnh, TP.HCM)</div>
+                            <div class="stop-title">Điểm đến làm việc (Dropoff)</div>
+                            <div class="stop-addr">Ngã tư Hàng Xanh / Tòa nhà Bitexco Quận 1</div>
                         </div>
                     </div>
 
                     <button id="btnRunSearch" class="roomio-button" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
                         <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
-                        <span>Thử chạy tìm xe theo lộ trình này</span>
+                        <span>Thử tìm xe đi làm qua đoạn này</span>
                     </button>
 
                     <div class="sql-snippet">
@@ -666,8 +626,8 @@
                 <!-- Dynamic Search Result Area -->
                 <div id="searchResultArea" class="search-results-box" style="display: none;">
                     <div style="font-size: 0.8rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
-                        <span>KẾT QUẢ TÌM THẤY TRỰC TIẾP:</span>
-                        <span class="badge-tag">Khớp lộ trình 100%</span>
+                        <span>KẾT QUẢ TÌM THẤY:</span>
+                        <span class="badge-tag badge-green">Cùng trục đường</span>
                     </div>
 
                     <div class="trip-item">
@@ -677,20 +637,26 @@
                                 <p style="font-size: 0.75rem; color: #52525B;">Toyota Vios G (Trắng) · Biển số: 61A-889.92</p>
                             </div>
                             <div style="text-align: right;">
-                                <div style="font-size: 1.15rem; font-weight: 900; color: #059669;">38.000đ</div>
-                                <div style="font-size: 0.7rem; color: #71717A; font-weight: 600;">tiền xăng chia đều</div>
+                                <span class="badge-tag badge-green" style="font-size: 0.75rem;">Tiền xăng tùy tâm</span>
+                                <div style="font-size: 0.7rem; color: #71717A; font-weight: 600; margin-top: 2px;">tự tính lúc đi chung</div>
                             </div>
                         </div>
 
                         <div style="font-size: 0.8rem; color: #27272A; line-height: 1.4; padding-top: 0.5rem; border-top: 1px dashed #E4E4E7;">
                             <div><strong>Xuất phát:</strong> 06:45 sáng (T2–T6) · Còn trống: <strong>2 ghế</strong></div>
-                            <div><strong>Tuyến gốc:</strong> TT Hành chính Bình Dương ➔ Nhà Hát Thành Phố (Q.1)</div>
+                            <div><strong>Lộ trình:</strong> TT Hành chính Bình Dương ➔ QL13 ➔ Hàng Xanh ➔ Quận 1</div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="roomio-button" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="alert('Đã gửi lời chào hẹn đi chung đến tài xế Tuấn!')">
+                                    <span>Nhắn hẹn đi cùng</span>
+                                    <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Card: VietQR & Legal Safety -->
+            <!-- Right Column: Community Etiquette & Legal Safety -->
             <div style="display: flex; flex-direction: column; gap: 1.75rem;">
                 <div class="roomio-window">
                     <div class="roomio-window-bar">
@@ -699,59 +665,63 @@
                             <span class="roomio-window-dot dot-yellow"></span>
                             <span class="roomio-window-dot dot-green"></span>
                         </div>
-                        <div class="window-title">chia-se-chi-phi-vietqr.pay</div>
+                        <div class="window-title">van-hoa-di-chung-xe.community</div>
                     </div>
 
-                    <div class="qr-card-content">
-                        <p style="font-size: 0.85rem; color: #3F3F46; line-height: 1.5; margin-bottom: 1.25rem;">
-                            Tiền xăng cộ và vé cầu đường chia đều cho số người trên xe (1 chủ xe + số khách).
-                            Hành khách quét mã <strong>VietQR</strong> chuyển khoản thẳng vào tài khoản ngân hàng của chủ xe.
+                    <div class="etiquette-card">
+                        <h3 style="font-size: 1.05rem; font-weight: 900; margin-bottom: 0.5rem;">Văn hóa đi nhờ xe văn minh</h3>
+                        <p style="font-size: 0.825rem; color: #52525B; line-height: 1.5; margin-bottom: 1rem;">
+                            Chủ xe là dân văn phòng tiện đường đón bạn cùng đi cho vui, không phải tài xế công nghệ kiếm sống. 
+                            Hãy giữ thái độ lịch thiệp và tôn trọng nhau:
                         </p>
 
-                        <div class="vietqr-box">
-                            <img src="https://img.vietqr.io/image/VCB-1023456789-compact2.png?amount=38000&addInfo=CP000001&accountName=NGUYEN%20MINH%20TUAN" 
-                                 alt="Mã VietQR đóng góp tiền xăng" 
-                                 class="vietqr-img">
+                        <div class="rule-item">
+                            <span class="rule-num">1</span>
                             <div>
-                                <div class="qr-meta-title">Nguyễn Minh Tuấn (VCB)</div>
-                                <div class="qr-meta-sub">TK: 1023456789 · Nội dung: <b>CP000001</b></div>
-                                <div>
-                                    <span class="amount-highlight">38.000đ</span>
-                                    <span style="font-size: 0.75rem; color: #52525B; font-weight: 600;">/ lượt đi</span>
+                                <div class="rule-title">Tiền xăng là tùy lòng hảo tâm</div>
+                                <div class="rule-desc">
+                                    Lúc lên xe hoặc tới nơi, bạn có thể gửi lại chút tiền xăng tượng trưng (ví dụ 20k–30k) 
+                                    hoặc mời chủ xe ly cà phê sáng. Tuyệt đối không có chuyện app đòi tiền hay ép giá.
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Cost transparency breakdown -->
-                        <div style="border: 2px solid #000000; border-radius: 6px; padding: 0.85rem; background: #FAFAFA;">
-                            <div class="cost-row">
-                                <span style="color: #52525B;">Tiền xăng (34.5 km × 1.800đ/km)</span>
-                                <span>62.100đ</span>
+                        <div class="rule-item">
+                            <span class="rule-num">2</span>
+                            <div>
+                                <div class="rule-title">Có mặt đúng giờ tại điểm hẹn</div>
+                                <div class="rule-desc">
+                                    Đến trước 3–5 phút ở điểm đón ven đường. Đừng để chủ xe phải dừng lâu gây kẹt xe 
+                                    hoặc trễ giờ chấm công ở công ty.
+                                </div>
                             </div>
-                            <div class="cost-row">
-                                <span style="color: #52525B;">Vé trạm thu phí Lái Thiêu</span>
-                                <span>15.000đ</span>
-                            </div>
-                            <div class="cost-row">
-                                <span>Mỗi người đóng góp (chia đôi)</span>
-                                <span style="color: #059669;">38.000đ</span>
+                        </div>
+
+                        <div class="rule-item">
+                            <span class="rule-num">3</span>
+                            <div>
+                                <div class="rule-title">Giữ gìn không gian xe sạch sẽ</div>
+                                <div class="rule-desc">
+                                    Không mang đồ ăn có mùi nồng, không hút thuốc và đóng mở cửa nhẹ nhàng.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Legal notice box (Neo-Brutalist blue card) -->
+                <!-- Legal peace of mind (Neo-Brutalist blue card) -->
                 <div class="roomio-blue-card">
                     <div style="display: flex; gap: 0.65rem; align-items: center; margin-bottom: 0.5rem;">
                         <svg class="icon" viewBox="0 0 24 24" style="stroke: #1E40AF; width: 22px; height: 22px;">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             <polyline points="9 12 11 14 15 10"></polyline>
                         </svg>
-                        <h4 style="font-size: 1rem; font-weight: 900; color: #1E3A8A;">Đúng luật, không phải xe dù gom khách</h4>
+                        <h4 style="font-size: 1rem; font-weight: 900; color: #1E3A8A;">An tâm pháp lý tuyệt đối</h4>
                     </div>
                     <p style="font-size: 0.825rem; color: #1E3A8A; line-height: 1.55; font-weight: 500;">
-                        Theo đúng tinh thần <strong>Nghị định 218/2026</strong>: Ứng dụng không bán vé, không mở ví giữ tiền hộ, 
-                        và không ấn định chuyến để kiếm lời. Đây thuần túy là xe gia đình cá nhân đi làm, chia sẻ tiền xăng cộ với đồng nghiệp cùng đường.
+                        Vì app <strong>không bán vé, không mở ví giữ tiền, không ấn định giá và không thu phí trung gian</strong>, 
+                        đây hoàn toàn là việc đi nhờ xe tự nguyện giữa các cá nhân cùng công sở. 
+                        Không một cơ quan nào có thể quy chụp là xe dù, bến cóc hay kinh doanh vận tải trái phép.
                     </p>
                 </div>
             </div>
@@ -788,14 +758,14 @@
 
         btnRunSearch.addEventListener('click', function() {
             btnRunSearch.disabled = true;
-            btnRunSearch.innerHTML = '<span>Đang tính toán tọa độ...</span>';
+            btnRunSearch.innerHTML = '<span>Đang dò tìm tuyến xe cùng đường...</span>';
 
             setTimeout(function() {
                 searchResultArea.style.display = 'block';
                 btnRunSearch.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="stroke: #15803D;"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="color: #15803D;">Đã tìm thấy chuyến xe phù hợp!</span>';
                 btnRunSearch.style.backgroundColor = '#DCFCE7';
                 btnRunSearch.disabled = false;
-            }, 300);
+            }, 250);
         });
     </script>
 </body>

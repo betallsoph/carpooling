@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\ContributionRecord;
 use App\Models\TripInstance;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class BookingController extends Controller
 {
     /**
-     * Hành khách gửi yêu cầu đặt chỗ
+     * Hành khách gửi yêu cầu ghép xe đi chung
      */
     public function store(Request $request): JsonResponse
     {
@@ -37,12 +36,9 @@ class BookingController extends Controller
         if ($trip->available_seats < $seats) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Chuyến xe không còn đủ số ghế trống yêu cầu.',
+                'message' => 'Xe không còn đủ số ghế trống yêu cầu.',
             ], 422);
         }
-
-        // Tạm tính chi phí đóng góp nếu được chấp nhận
-        $estCost = $trip->calculateCostPerPerson($seats);
 
         $booking = new Booking([
             'trip_instance_id' => $trip->id,
@@ -53,7 +49,7 @@ class BookingController extends Controller
             'dropoff_name' => $validated['dropoff_name'],
             'dropoff_address' => $validated['dropoff_address'],
             'status' => 'requested',
-            'calculated_contribution' => $estCost,
+            'calculated_contribution' => 0, // Không áp giá, tiền xăng tự thỏa thuận tùy tâm
             'note' => $validated['note'] ?? null,
         ]);
 
@@ -63,14 +59,13 @@ class BookingController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Đã gửi yêu cầu ghép xe đến chủ xe.',
+            'message' => 'Đã gửi lời hẹn đi cùng xe đến chủ xe.',
             'data' => $booking,
         ], 201);
     }
 
     /**
-     * Chủ xe chấp nhận yêu cầu ghép chuyến
-     * Tự động sinh bản ghi VietQR chia sẻ chi phí
+     * Chủ xe đồng ý cho đi cùng
      */
     public function accept(Request $request, Booking $booking): JsonResponse
     {
@@ -86,106 +81,46 @@ class BookingController extends Controller
         }
 
         if ($trip->available_seats < $booking->seats_requested) {
-            return response()->json(['status' => 'error', 'message' => 'Không còn đủ ghế trống.'], 422);
+            return response()->json(['status' => 'error', 'message' => 'Xe không còn đủ ghế trống.'], 422);
         }
 
-        DB::transaction(function () use ($booking, $trip, $driverProfile) {
+        DB::transaction(function () use ($booking, $trip) {
             $booking->status = 'accepted';
             $booking->accepted_at = now();
-
-            // Trừ số ghế trống
-            $trip->available_seats -= $booking->seats_requested;
-
-            // Tính lại số tiền đóng góp công bằng giữa lái xe và toàn bộ khách
-            $costPerPerson = $trip->calculateCostPerPerson(0);
-            $trip->current_cost_per_person = $costPerPerson;
-            $trip->save();
-
-            $booking->calculated_contribution = $costPerPerson * $booking->seats_requested;
             $booking->save();
 
-            // Tạo VietQR Record cho giao dịch trực tiếp
-            $transferContent = 'CP' . str_pad((string) $booking->id, 6, '0', STR_PAD_LEFT);
-            $qrUrl = ContributionRecord::generateVietQrUrl(
-                bankCode: $driverProfile->bank_code ?? 'VCB',
-                accountNo: $driverProfile->bank_account_no ?? '1023456789',
-                accountName: $driverProfile->bank_account_name ?? 'CHU XE CARPOOL',
-                amount: $booking->calculated_contribution,
-                transferContent: $transferContent
-            );
-
-            ContributionRecord::updateOrCreate(
-                ['booking_id' => $booking->id],
-                [
-                    'trip_instance_id' => $trip->id,
-                    'passenger_id' => $booking->passenger_id,
-                    'driver_profile_id' => $driverProfile->id,
-                    'amount' => $booking->calculated_contribution,
-                    'transfer_content' => $transferContent,
-                    'vietqr_url' => $qrUrl,
-                    'status' => 'pending',
-                ]
-            );
+            // Cập nhật số ghế trống còn lại
+            $trip->available_seats -= $booking->seats_requested;
+            $trip->save();
         });
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Đã chấp nhận yêu cầu ghép xe. Mã VietQR chia sẻ chi phí đã được tạo.',
-            'data' => $booking->load('contributionRecord'),
+            'message' => 'Đã đồng ý cho đồng nghiệp đi cùng xe. Hai bên có thể nhắn tin hẹn giờ và điểm đón cụ thể.',
+            'data' => $booking,
         ]);
     }
 
     /**
-     * Khách xác nhận "Đã chuyển tiền đóng góp qua VietQR"
+     * Chủ xe từ chối lời hẹn
      */
-    public function confirmTransfer(Request $request, Booking $booking): JsonResponse
-    {
-        if ($booking->passenger_id !== $request->user()->id) {
-            return response()->json(['status' => 'error', 'message' => 'Chỉ hành khách mới có thể xác nhận đã chuyển.'], 403);
-        }
-
-        $record = $booking->contributionRecord;
-        if (!$record) {
-            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy bản ghi đóng góp.'], 404);
-        }
-
-        $record->update([
-            'status' => 'passenger_confirmed',
-            'passenger_confirmed_at' => now(),
-            'proof_image_url' => $request->input('proof_image_url'),
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Đã ghi nhận bạn đã chuyển khoản. Chờ chủ xe xác nhận nhận tiền.',
-            'data' => $record,
-        ]);
-    }
-
-    /**
-     * Chủ xe xác nhận "Đã nhận tiền đóng góp"
-     */
-    public function confirmReceipt(Request $request, Booking $booking): JsonResponse
+    public function decline(Request $request, Booking $booking): JsonResponse
     {
         $driverProfile = $booking->tripInstance->driverProfile;
+
         if ($driverProfile->user_id !== $request->user()->id && $request->user()->role !== 'admin') {
-            return response()->json(['status' => 'error', 'message' => 'Chỉ chủ xe mới có thể xác nhận đã nhận.'], 403);
+            return response()->json(['status' => 'error', 'message' => 'Bạn không có quyền từ chối yêu cầu này.'], 403);
         }
 
-        $record = $booking->contributionRecord;
-        if (!$record) {
-            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy bản ghi đóng góp.'], 404);
-        }
-
-        $record->update([
-            'status' => 'completed',
-            'driver_confirmed_at' => now(),
+        $booking->update([
+            'status' => 'declined',
+            'rejection_reason' => $request->input('reason', 'Chủ xe không tiện đón ở chặng này.'),
         ]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Chủ xe đã xác nhận nhận đủ tiền chia sẻ chi phí.',
-            'data' => $record,
+            'message' => 'Đã từ chối lời hẹn đi chung.',
+            'data' => $booking,
         ]);
     }
 }
