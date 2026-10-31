@@ -4,6 +4,28 @@
 > **Xây dựng Nền tảng kết nối đi nhờ xe công sở (Commuter Carpooling) 100% phi thương mại tại Việt Nam.**  
 > *"Tiện đường thì đi chung, tiền xăng tùy lòng."*
 
+## Giao diện
+
+<p align="center">
+  <img src="docs/screenshots/trang-chu.png" alt="Trang chủ: ghép hành lang PostGIS và văn hóa đi nhờ xe" width="900">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/dang-nhap.png" alt="Đăng nhập với tài khoản thử nghiệm admin, chủ xe và hành khách" width="900">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/tong-quan.png" alt="Tổng quan chuyến đi làm sáng, ghế trống và phí nền tảng 0 đồng" width="900">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/tim-hanh-lang.png" alt="Tìm xe trên hành lang 2 km, cùng chiều từ Bình Dương tới Hàng Xanh" width="900">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/yeu-cau-ghep.png" alt="Yêu cầu ghép xe đã chấp nhận, đón Lotte Mart và trả Hàng Xanh" width="900">
+</p>
+
 ---
 
 ## 1. Giới thiệu Đề tài & Tinh thần Cốt lõi
@@ -47,6 +69,7 @@ carpooling/
 │       └── index.html
 │
 ├── docs/                             # Báo cáo, tài liệu nghiên cứu đề tài
+│   ├── screenshots/                  # Ảnh giao diện dùng trong README
 │   └── tong-hop-carpooling-viet-nam.docx
 ├── package.json                      # Monorepo Workspace Orchestration (npm workspaces)
 ├── docker-compose.yml                # Dịch vụ hạ tầng (PostgreSQL 16 PostGIS, Redis)
