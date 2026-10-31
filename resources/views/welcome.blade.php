@@ -87,18 +87,6 @@
             color: #000000;
         }
 
-        .brand-logo-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 6px;
-            border: 2px solid #000000;
-            background-color: var(--color-primary-blue);
-            box-shadow: var(--shadow-primary);
-        }
-
         .brand-title {
             font-size: 1.5rem;
             font-weight: 900;
@@ -507,30 +495,14 @@
         <!-- Header -->
         <header>
             <a href="/" class="brand-link">
-                <div class="brand-logo-box">
-                    <svg class="icon" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 10.9 2 11v5c0 .6.4 1 1 1h2"></path>
-                        <circle cx="7" cy="17" r="2"></circle>
-                        <path d="M9 17h6"></path>
-                        <circle cx="17" cy="17" r="2"></circle>
-                    </svg>
-                </div>
-                <div>
-                    <div class="brand-title">carpooling<span>.vn</span></div>
-                </div>
+                <div class="brand-title">carpooling<span>.vn</span></div>
             </a>
 
             <div class="header-actions">
                 <a href="/horizon" target="_blank" class="roomio-button-white">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
                     <span>Hàng đợi Horizon</span>
                 </a>
                 <a href="/admin" target="_blank" class="roomio-button">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
                     <span>Trang quản trị (Admin)</span>
                 </a>
             </div>
@@ -538,11 +510,6 @@
 
         <!-- Hero Section -->
         <section class="hero">
-            <div class="corridor-pill">
-                <span class="pulse-dot"></span>
-                <span>Tuyến thí điểm số 1: Bình Dương (Thủ Dầu Một) ➔ Quận 1 (TP.HCM)</span>
-            </div>
-
             <h1>Tiện đường thì đi chung,<br>tiền xăng tùy lòng.</h1>
 
             <p class="hero-desc">
@@ -612,7 +579,6 @@
                     </div>
 
                     <button id="btnRunSearch" class="roomio-button" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
-                        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
                         <span>Thử tìm xe đi làm qua đoạn này</span>
                     </button>
 
@@ -648,7 +614,6 @@
                             <div style="margin-top: 0.5rem;">
                                 <button class="roomio-button" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="alert('Đã gửi lời chào hẹn đi chung đến tài xế Tuấn!')">
                                     <span>Nhắn hẹn đi cùng</span>
-                                    <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                 </button>
                             </div>
                         </div>
@@ -736,7 +701,6 @@
             <div style="display: flex; gap: 0.75rem;">
                 <a href="/admin/login" target="_blank" class="roomio-button">
                     <span>Mở màn hình đăng nhập Admin</span>
-                    <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
         </div>
@@ -762,7 +726,7 @@
 
             setTimeout(function() {
                 searchResultArea.style.display = 'block';
-                btnRunSearch.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="stroke: #15803D;"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="color: #15803D;">Đã tìm thấy chuyến xe phù hợp!</span>';
+                btnRunSearch.innerHTML = '<span style="color: #15803D;">Đã tìm thấy chuyến xe phù hợp!</span>';
                 btnRunSearch.style.backgroundColor = '#DCFCE7';
                 btnRunSearch.disabled = false;
             }, 250);
