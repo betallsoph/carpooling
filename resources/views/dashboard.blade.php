@@ -124,6 +124,7 @@
             border-radius: 6px;
             border: 2px solid transparent;
             transition: all 120ms ease;
+            cursor: pointer;
         }
 
         .nav-item:hover {
@@ -345,6 +346,38 @@
             margin-top: 0.25rem;
         }
 
+        /* Underline Tabs (Roomio Style) */
+        .tab-bar {
+            display: flex;
+            gap: 1.5rem;
+            border-bottom: 2px solid #E4E4E7;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 0.75rem;
+            margin-bottom: -2px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #71717A;
+            cursor: pointer;
+            transition: all 120ms ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: #000000;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #000000;
+            color: #2563eb;
+        }
+
         /* Roomio Window Cards */
         .roomio-window {
             overflow: hidden;
@@ -390,6 +423,16 @@
 
         .window-content {
             padding: 1.5rem;
+        }
+
+        /* Roomio Card */
+        .roomio-card {
+            border: 2px solid #000000;
+            border-radius: 8px;
+            background: #FFFFFF;
+            box-shadow: var(--shadow-secondary);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         /* Trip cards */
@@ -485,6 +528,167 @@
             background-color: #FAFAFA;
         }
 
+        /* Roomio Form Fields (Exact Roomio Token Standard) */
+        .roomio-form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .roomio-form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 0.35rem;
+        }
+
+        .roomio-form-input {
+            width: 100%;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            background-color: #FFFFFF;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #000000;
+            font-family: inherit;
+            outline: none;
+            transition: all 120ms ease;
+        }
+
+        .roomio-form-input:focus {
+            box-shadow: 0 0 0 3px #BFDBFE;
+            border-color: #000000;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Day selector pills */
+        .weekday-picker {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .day-chip {
+            padding: 0.45rem 0.85rem;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            background-color: #FFFFFF;
+            color: #52525B;
+            cursor: pointer;
+            transition: all 100ms ease;
+            user-select: none;
+        }
+
+        .day-chip.selected {
+            background-color: var(--color-primary-blue);
+            color: #000000;
+            box-shadow: var(--shadow-primary);
+        }
+
+        /* Roomio Form Drawer (Slide-over) */
+        .roomio-form-drawer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: none;
+            justify-content: flex-end;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(2px);
+        }
+
+        .roomio-form-drawer-overlay.open {
+            display: flex;
+        }
+
+        .roomio-form-drawer-panel {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            max-width: 620px;
+            flex-direction: column;
+            overflow: hidden;
+            border-left: 2px solid #000000;
+            background: #FFFFFF;
+            box-shadow: -4px 0px 0px 0px rgba(0,0,0,0.15);
+            animation: drawerSlideIn 0.22s ease-out;
+        }
+
+        @keyframes drawerSlideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .roomio-form-drawer-head {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 2px solid #000000;
+            background-color: #F4F4F5;
+            user-select: none;
+        }
+
+        .roomio-form-drawer-body {
+            min-height: 0;
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .roomio-form-drawer-foot {
+            display: flex;
+            flex-shrink: 0;
+            gap: 0.75rem;
+            border-top: 2px solid #000000;
+            padding: 1rem 1.5rem;
+            background-color: #FAFAFA;
+        }
+
+        .close-btn {
+            background: #FFFFFF;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 100ms;
+        }
+
+        .close-btn:hover {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .alert-success {
+            border: 2px solid #000000;
+            background-color: #DCFCE7;
+            color: #166534;
+            padding: 0.85rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.45;
+        }
+
         /* Neo-brutalist Blue Notice */
         .roomio-blue-card {
             border-radius: 8px;
@@ -523,10 +727,10 @@
                 </a>
 
                 <nav class="nav-menu">
-                    <a href="/dashboard" class="nav-item active">Tổng quan</a>
-                    <a href="#trips" class="nav-item">Chuyến xe đi làm</a>
-                    <a href="#bookings" class="nav-item">Yêu cầu ghép xe</a>
-                    <a href="/" class="nav-item">Tìm chuyến trên bản đồ</a>
+                    <div class="nav-item active" onclick="switchTab('trips')">Tổng quan chuyến xe</div>
+                    <div class="nav-item" onclick="openDrawer()">Đăng lịch trình xe</div>
+                    <div class="nav-item" onclick="switchTab('bookings')">Yêu cầu ghép xe</div>
+                    <a href="/" class="nav-item">Tìm xe trên bản đồ</a>
                     @if ($user->role === 'admin')
                         <a href="/admin" target="_blank" class="nav-item" style="color: #2563eb;">Quản trị Filament Ops</a>
                     @endif
@@ -567,17 +771,22 @@
                     <a href="/" class="roomio-button-white">
                         <span>Về trang chủ</span>
                     </a>
+                    <button class="roomio-button" onclick="openDrawer()">
+                        <span>Đăng lịch trình xe</span>
+                    </button>
                     @if ($user->role === 'admin')
-                        <a href="/admin" target="_blank" class="roomio-button">
+                        <a href="/admin" target="_blank" class="roomio-button-white">
                             <span>Mở Filament Admin</span>
                         </a>
-                    @else
-                        <button class="roomio-button" onclick="alert('Tính năng đăng lịch trình xe sáng chiều đang mở trong đợt thử nghiệm!')">
-                            <span>Đăng lịch trình xe</span>
-                        </button>
                     @endif
                 </div>
             </div>
+
+            @if (session('success'))
+                <div class="alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <!-- Stats Ribbon (Continuous strip, roomio style) -->
             <div class="stats-ribbon">
@@ -603,8 +812,21 @@
                 </div>
             </div>
 
-            <!-- Window 1: Live Trip Instances -->
-            <div id="trips" class="roomio-window">
+            <!-- Underline Tabs (Roomio Style) -->
+            <div class="tab-bar">
+                <button id="tabBtnTrips" class="tab-btn active" onclick="switchTab('trips')">
+                    Chuyến xe đi làm ({{ $trips->count() }})
+                </button>
+                <button id="tabBtnForm" class="tab-btn" onclick="switchTab('form')">
+                    Đăng lịch trình xe mới (Form Roomio)
+                </button>
+                <button id="tabBtnBookings" class="tab-btn" onclick="switchTab('bookings')">
+                    Yêu cầu ghép xe ({{ $bookings->count() }})
+                </button>
+            </div>
+
+            <!-- TAB 1: Live Trip Instances -->
+            <div id="sectionTrips" class="roomio-window">
                 <div class="roomio-window-bar">
                     <div class="roomio-window-dots">
                         <span class="roomio-window-dot dot-red"></span>
@@ -618,7 +840,9 @@
                 <div class="window-content">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                         <h3 style="font-size: 1.05rem; font-weight: 900;">Chuyến xe dọc tuyến đi làm sáng nay</h3>
-                        <span class="badge-tag">{{ $trips->count() }} chuyến hoạt động</span>
+                        <button class="roomio-button" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="openDrawer()">
+                            <span>Thêm chuyến xe</span>
+                        </button>
                     </div>
 
                     <div class="trip-grid">
@@ -653,15 +877,139 @@
                             </div>
                         @empty
                             <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #71717A; font-weight: 600;">
-                                Hiện chưa có chuyến xe nào được đăng cho ngày hôm nay.
+                                Hiện chưa có chuyến xe nào được đăng. Hãy bấm "Đăng lịch trình xe" ở góc trên để tạo chuyến đầu tiên!
                             </div>
                         @endforelse
                     </div>
                 </div>
             </div>
 
-            <!-- Window 2: Bookings & Matching Requests -->
-            <div id="bookings" class="roomio-window">
+            <!-- TAB 2: Inline Form (Form Roomio Chuẩn) -->
+            <div id="sectionForm" class="roomio-card" style="display: none;">
+                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #000000; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="font-size: 1.2rem; font-weight: 900;">Đăng lịch trình xe đi làm (T2–T6)</h3>
+                        <p style="font-size: 0.8rem; color: #52525B; font-weight: 600; margin-top: 0.25rem;">
+                            Chủ xe mở ghế trống cho đồng nghiệp đi nhờ dọc đường. 100% phi thương mại, không thu tiền trên app.
+                        </p>
+                    </div>
+                    <span class="badge-tag badge-green">Form chuẩn Roomio</span>
+                </div>
+
+                <form action="{{ route('dashboard.trips.store') }}" method="POST">
+                    @csrf
+
+                    <div class="form-grid-2">
+                        <div class="roomio-form-group">
+                            <label for="inline_origin_name" class="roomio-form-label">Điểm đón xuất phát (Origin)</label>
+                            <input 
+                                id="inline_origin_name" 
+                                name="origin_name" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                required 
+                                placeholder="Ví dụ: TT Hành chính Bình Dương, Thủ Dầu Một"
+                                value="{{ old('origin_name', 'TT Hành chính Bình Dương (Thủ Dầu Một)') }}"
+                            >
+                        </div>
+
+                        <div class="roomio-form-group">
+                            <label for="inline_destination_name" class="roomio-form-label">Điểm đến làm việc (Destination)</label>
+                            <input 
+                                id="inline_destination_name" 
+                                name="destination_name" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                required 
+                                placeholder="Ví dụ: Ngã tư Hàng Xanh / Tòa nhà Bitexco Quận 1"
+                                value="{{ old('destination_name', 'Tòa nhà Bitexco / Quận 1 TP.HCM') }}"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="roomio-form-group">
+                            <label for="inline_departure_time" class="roomio-form-label">Giờ xuất phát buổi sáng</label>
+                            <input 
+                                id="inline_departure_time" 
+                                name="departure_time" 
+                                type="time" 
+                                class="roomio-form-input" 
+                                required 
+                                value="{{ old('departure_time', '06:45') }}"
+                            >
+                        </div>
+
+                        <div class="roomio-form-group">
+                            <label for="inline_available_seats" class="roomio-form-label">Số ghế trống mở cho đi nhờ</label>
+                            <select id="inline_available_seats" name="available_seats" class="roomio-form-input">
+                                <option value="1">1 ghế trống</option>
+                                <option value="2">2 ghế trống</option>
+                                <option value="3" selected>3 ghế trống</option>
+                                <option value="4">4 ghế trống</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="roomio-form-group">
+                        <label class="roomio-form-label">Ngày đi cố định trong tuần</label>
+                        <div class="weekday-picker">
+                            <div class="day-chip selected">Thứ Hai</div>
+                            <div class="day-chip selected">Thứ Ba</div>
+                            <div class="day-chip selected">Thứ Tư</div>
+                            <div class="day-chip selected">Thứ Năm</div>
+                            <div class="day-chip selected">Thứ Sáu</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="roomio-form-group">
+                            <label for="inline_vehicle_model" class="roomio-form-label">Dòng xe ô tô</label>
+                            <input 
+                                id="inline_vehicle_model" 
+                                name="vehicle_model" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                placeholder="Ví dụ: Toyota Vios G 2023"
+                                value="{{ old('vehicle_model', 'Toyota Vios G 2023') }}"
+                            >
+                        </div>
+
+                        <div class="roomio-form-group">
+                            <label for="inline_vehicle_plate" class="roomio-form-label">Biển số xe</label>
+                            <input 
+                                id="inline_vehicle_plate" 
+                                name="vehicle_plate" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                placeholder="Ví dụ: 61A-889.92"
+                                value="{{ old('vehicle_plate', '61A-889.92') }}"
+                            >
+                        </div>
+                    </div>
+
+                    <div style="background-color: #F4F4F5; border: 2px solid #000000; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <div style="font-size: 0.825rem; font-weight: 800; color: #18181B; margin-bottom: 0.25rem;">
+                            Văn hóa chia sẻ chi phí xăng dầu:
+                        </div>
+                        <div style="font-size: 0.8rem; color: #52525B; line-height: 1.45; font-weight: 500;">
+                            Hệ thống <strong>không can thiệp thu tiền hay mở ví điện tử</strong>. Người đi nhờ tự nguyện gửi chút tiền xăng (hoặc mời ly cà phê) trực tiếp cho chủ xe lúc đi chung.
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button type="button" class="roomio-button-white" onclick="switchTab('trips')">
+                            <span>Hủy bỏ</span>
+                        </button>
+                        <button type="submit" class="roomio-button">
+                            <span>Lưu và mở chuyến xe</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 3: Bookings Queue -->
+            <div id="sectionBookings" class="roomio-window" style="display: none;">
                 <div class="roomio-window-bar">
                     <div class="roomio-window-dots">
                         <span class="roomio-window-dot dot-red"></span>
@@ -732,6 +1080,120 @@
         </main>
     </div>
 
+    <!-- Roomio Form Drawer (Slide-over panel, exact roomio standard) -->
+    <div id="drawerOverlay" class="roomio-form-drawer-overlay" onclick="closeDrawer(event)">
+        <div class="roomio-form-drawer-panel" onclick="event.stopPropagation()">
+            <div class="roomio-form-drawer-head">
+                <span style="font-size: 1.05rem; font-weight: 900; color: #000000;">Đăng lịch trình xe đi làm (T2–T6)</span>
+                <button class="close-btn" onclick="closeDrawer(event)" aria-label="Đóng">✕</button>
+            </div>
+
+            <form action="{{ route('dashboard.trips.store') }}" method="POST" style="display: flex; flex-direction: column; height: 100%; min-height: 0;">
+                @csrf
+
+                <div class="roomio-form-drawer-body">
+                    <div class="roomio-form-group">
+                        <label for="drawer_origin_name" class="roomio-form-label">Điểm xuất phát đón khách (Origin)</label>
+                        <input 
+                            id="drawer_origin_name" 
+                            name="origin_name" 
+                            type="text" 
+                            class="roomio-form-input" 
+                            required 
+                            placeholder="Ví dụ: TT Hành chính Bình Dương (Thủ Dầu Một)"
+                            value="TT Hành chính Bình Dương"
+                        >
+                    </div>
+
+                    <div class="roomio-form-group">
+                        <label for="drawer_destination_name" class="roomio-form-label">Điểm đến làm việc (Destination)</label>
+                        <input 
+                            id="drawer_destination_name" 
+                            name="destination_name" 
+                            type="text" 
+                            class="roomio-form-input" 
+                            required 
+                            placeholder="Ví dụ: Tòa nhà Bitexco / Quận 1"
+                            value="Bitexco Financial Tower, Quận 1"
+                        >
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="roomio-form-group">
+                            <label for="drawer_departure_time" class="roomio-form-label">Giờ xuất phát sáng</label>
+                            <input 
+                                id="drawer_departure_time" 
+                                name="departure_time" 
+                                type="time" 
+                                class="roomio-form-input" 
+                                required 
+                                value="06:45"
+                            >
+                        </div>
+
+                        <div class="roomio-form-group">
+                            <label for="drawer_available_seats" class="roomio-form-label">Số ghế mở đi chung</label>
+                            <select id="drawer_available_seats" name="available_seats" class="roomio-form-input">
+                                <option value="1">1 ghế</option>
+                                <option value="2">2 ghế</option>
+                                <option value="3" selected>3 ghế</option>
+                                <option value="4">4 ghế</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="roomio-form-group">
+                        <label class="roomio-form-label">Các ngày đi làm cố định</label>
+                        <div class="weekday-picker">
+                            <div class="day-chip selected">T2</div>
+                            <div class="day-chip selected">T3</div>
+                            <div class="day-chip selected">T4</div>
+                            <div class="day-chip selected">T5</div>
+                            <div class="day-chip selected">T6</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="roomio-form-group">
+                            <label for="drawer_vehicle_model" class="roomio-form-label">Dòng xe</label>
+                            <input 
+                                id="drawer_vehicle_model" 
+                                name="vehicle_model" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                value="Toyota Vios G 2023"
+                            >
+                        </div>
+
+                        <div class="roomio-form-group">
+                            <label for="drawer_vehicle_plate" class="roomio-form-label">Biển số</label>
+                            <input 
+                                id="drawer_vehicle_plate" 
+                                name="vehicle_plate" 
+                                type="text" 
+                                class="roomio-form-input" 
+                                value="61A-889.92"
+                            >
+                        </div>
+                    </div>
+
+                    <div style="background-color: #F4F4F5; border: 2px solid #000000; border-radius: 6px; padding: 0.85rem; font-size: 0.8rem; color: #52525B;">
+                        <strong>Quy tắc phi thương mại:</strong> Nền tảng không thu phí. Tiền xăng cộ là tự nguyện giữa chủ xe và người đi nhờ khi lên xe.
+                    </div>
+                </div>
+
+                <div class="roomio-form-drawer-foot">
+                    <button type="button" class="roomio-button-white" style="flex: 1;" onclick="closeDrawer(event)">
+                        <span>Hủy</span>
+                    </button>
+                    <button type="submit" class="roomio-button" style="flex: 2;">
+                        <span>Lưu và mở chuyến xe</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Roomio ripple hover effect
         document.addEventListener('pointerover', function(event) {
@@ -740,6 +1202,36 @@
             const bounds = action.getBoundingClientRect();
             action.style.setProperty('--hover-x', `${event.clientX - bounds.left}px`);
             action.style.setProperty('--hover-y', `${event.clientY - bounds.top}px`);
+        });
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.getElementById('sectionTrips').style.display = tab === 'trips' ? 'block' : 'none';
+            document.getElementById('sectionForm').style.display = tab === 'form' ? 'block' : 'none';
+            document.getElementById('sectionBookings').style.display = tab === 'bookings' ? 'block' : 'none';
+
+            document.getElementById('tabBtnTrips').classList.toggle('active', tab === 'trips');
+            document.getElementById('tabBtnForm').classList.toggle('active', tab === 'form');
+            document.getElementById('tabBtnBookings').classList.toggle('active', tab === 'bookings');
+        }
+
+        // Roomio Drawer Controls
+        function openDrawer() {
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer(event) {
+            if (event) event.preventDefault();
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Weekday toggle chips
+        document.querySelectorAll('.day-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                chip.classList.toggle('selected');
+            });
         });
     </script>
 </body>

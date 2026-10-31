@@ -18,6 +18,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
+Route::post('/dashboard/trips', [DashboardController::class, 'storeTrip'])
+    ->middleware('auth')
+    ->name('dashboard.trips.store');
+
 // Redirect admin login to custom roomio login
 Route::get('/admin/login', function () {
     return redirect()->route('login');
