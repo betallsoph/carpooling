@@ -1,19 +1,19 @@
 {
-    "$schema": "https://www.schemastore.org/package.json",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
-        "concurrently": "^10.0.3",
-        "laravel-vite-plugin": "^3.1",
-        "tailwindcss": "^4.0.0",
-        "vite": "^8.0.0"
-    },
-    "optionalDependencies": {
-        "@laravel/multiplex": "^0.4.1"
-    }
+  "name": "carpooling-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nền tảng chia sẻ chuyến đi công sở phi thương mại tại Việt Nam (Monorepo: Laravel 13 + React Vite)",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"api,web\" -c \"blue,green\" \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "cd apps/api && php artisan serve --port=8000",
+    "dev:web": "npm run dev --workspace apps/web",
+    "build:web": "npm run build --workspace apps/web",
+    "test:api": "cd apps/api && php artisan test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
+  }
 }

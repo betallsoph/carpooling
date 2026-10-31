@@ -1,132 +1,149 @@
-# carpooling.vn
+# carpooling.vn — Monorepo
 
-> **Nền tảng kết nối đi chung xe văn phòng 100% phi thương mại tại Việt Nam.**  
+> **Đề tài Đồ án môn học / Khóa luận tốt nghiệp:**  
+> **Xây dựng Nền tảng kết nối đi nhờ xe công sở (Commuter Carpooling) 100% phi thương mại tại Việt Nam.**  
 > *"Tiện đường thì đi chung, tiền xăng tùy lòng."*
 
 ---
 
-## 1. Giới thiệu dự án
+## 1. Giới thiệu Đề tài & Tinh thần Cốt lõi
 
-`carpooling.vn` là giải pháp công nghệ kết nối các nhân viên văn phòng, người đi làm có cùng cung đường di chuyển hàng ngày (commuter carpooling). Hệ thống giúp tận dụng các ghế trống trên ô tô cá nhân vào giờ cao điểm sáng và chiều, giảm thiểu ùn tắc giao thông, tiết kiệm chi phí nhiên liệu và bảo vệ môi trường.
+`carpooling.vn` là hệ thống công nghệ kết nối những người đi làm có cùng tuyến đường di chuyển hàng ngày (sáng đi làm, chiều về nhà). Dự án giải quyết bài toán lãng phí ghế trống trên ô tô cá nhân vào giờ cao điểm, giảm ùn tắc giao thông đô thị và giảm lượng phát thải carbon.
 
-### Tinh thần & Pháp lý cốt lõi:
-- **100% Phi thương mại**: Nền tảng **không thu phí trung gian, không ấn định giá vé, không mở ví điện tử giữ tiền**.
-- **Tiền xăng tùy lòng**: Người đi nhờ tự nguyện chia sẻ một phần chi phí nhiên liệu, phí cầu đường (hoặc mời cà phê) trực tiếp với chủ xe lúc đi chung.
-- **An tâm pháp lý**: Hoàn toàn là hành vi đi nhờ xe tự nguyện giữa các cá nhân công sở, không phát sinh giao dịch kinh doanh vận tải hành khách trái phép theo quy định pháp luật Việt Nam.
-- **Văn hóa văn minh**: Tôn trọng không gian riêng của chủ xe, có mặt đúng giờ hẹn và giữ gìn xe sạch sẽ.
-
----
-
-## 2. Công nghệ sử dụng (Tech Stack)
-
-- **Ngôn ngữ & Runtime**: PHP 8.5+
-- **Backend Framework**: Laravel 13.x
-- **Bảng điều khiển quản trị (Admin Panel)**: [Filament v5](https://filamentphp.com) (quản lý tài xế, phương tiện, chuyến đi, báo cáo)
-- **Cơ sở dữ liệu & Không gian địa lý (GIS)**: 
-  - **PostgreSQL 16 + PostGIS**: Xử lý dữ liệu không gian, tuyến đường xe chạy dạng `Geometry(LineString, 4326)`.
-  - Hỗ trợ fallback **SQLite** cho môi trường phát triển giao diện nhanh (Local UI Dev).
-- **Hàng đợi & Giám sát**: Laravel Horizon + Redis.
-- **Xác thực API**: Laravel Sanctum (Token-based authentication).
-- **Giao diện người dùng (UI)**: Neo-brutalist Design System kế thừa phong cách `roomio` (viền đen sắc nét, bóng đổ cứng `2px 2px 0px -1px #000`, hiệu ứng tương tác mượt mà, hoàn toàn không dùng emoji).
+### Các trụ cột kiến trúc & Pháp lý:
+- **Mô hình Monorepo chuẩn công nghiệp**: Tách biệt rõ ràng giữa **Backend (Laravel 13 REST API)** và **Frontend (ReactJS + Vite)** trong cùng một repository được điều phối tập trung.
+- **100% Phi thương mại**: Nền tảng **không thu phí trung gian, không ấn định giá vé, không mở ví giữ tiền**.
+- **An tâm pháp lý**: Hoàn toàn là hành vi đi nhờ xe tự nguyện giữa các cá nhân công sở, không phát sinh yếu tố kinh doanh vận tải hành khách trái phép theo pháp luật Việt Nam.
+- **Tiền xăng tùy lòng**: Người đi nhờ tự nguyện chia sẻ một phần chi phí nhiên liệu, phí cầu đường trực tiếp với chủ xe lúc gặp mặt.
 
 ---
 
-## 3. Thuật toán ghép hành lang (Corridor Matching)
-
-Khác với các ứng dụng taxi/xe ôm công nghệ tìm tài xế theo bán kính tròn xung quanh điểm đón, `carpooling.vn` sử dụng thuật toán **ghép tuyến hành lang (Corridor Search)** với PostGIS:
-
-1. **Quét độ lệch hành lang (`ST_DWithin`)**: Tìm các chuyến xe có lộ trình đi qua điểm đón (pickup) và điểm trả (dropoff) của hành khách trong phạm vi cho phép (mặc định ≤ 2km):
-   ```sql
-   ST_DWithin(route_line::geography, ST_SetSRID(ST_Point(lon, lat), 4326)::geography, 2000)
-   ```
-2. **Kiểm tra đúng chiều di chuyển (`ST_LineLocatePoint`)**: Xác định vị trí tương đối trên tuyến đường để đảm bảo điểm đón phải diễn ra **trước** điểm trả trên cùng chiều xe chạy:
-   ```sql
-   ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(p_lon, p_lat), 4326)) 
-   < 
-   ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(d_lon, d_lat), 4326))
-   ```
-
----
-
-## 4. Cài đặt và Chạy thử (Local Development)
-
-### Yêu cầu tiên quyết:
-- PHP >= 8.5
-- Composer >= 2.x
-- Docker & Docker Compose (tùy chọn khi cần chạy PostGIS + Redis)
-
-### Các bước cài đặt:
-
-1. **Clone repository:**
-   ```bash
-   git clone https://github.com/betallsoph/carpooling.git
-   cd carpooling
-   ```
-
-2. **Cài đặt các gói phụ thuộc (Dependencies):**
-   ```bash
-   composer install
-   ```
-
-3. **Thiết lập biến môi trường:**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-
-4. **Chạy Migration và Seed dữ liệu mẫu:**
-   - *Chế độ SQLite (nhanh, kiểm thử giao diện & API cơ bản):*
-     ```bash
-     touch database/database.sqlite
-     php artisan migrate --seed
-     ```
-   - *Chế độ Docker PostGIS & Redis:*
-     ```bash
-     docker compose up -d
-     php artisan migrate --seed
-     ```
-
-5. **Khởi chạy ứng dụng:**
-   ```bash
-   php artisan serve
-   ```
-   Ứng dụng sẽ chạy tại: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
----
-
-## 5. Tài khoản & Địa chỉ truy cập
-
-- **Trang chủ & Mô phỏng ghép xe**: `http://127.0.0.1:8000`
-- **Bảng điều khiển quản trị (Filament Admin)**: `http://127.0.0.1:8000/admin`
-  - **Email**: `admin@carpooling.vn`
-  - **Mật khẩu**: `password`
-- **Giám sát hàng đợi (Laravel Horizon)**: `http://127.0.0.1:8000/horizon`
-
----
-
-## 6. Cấu trúc thư mục trọng tâm
+## 2. Cấu trúc Thư mục Monorepo (Workspace Architecture)
 
 ```text
-├── app/
-│   ├── Filament/Resources/       # Quản trị tài xế, chuyến đi, xe, báo cáo vi phạm
-│   ├── Http/Controllers/Api/     # REST API (tìm chuyến xe, gửi lời chào hẹn đi cùng)
-│   └── Models/
-│       ├── DriverProfile.php     # Hồ sơ bằng lái, giấy tờ xe
-│       ├── TripTemplate.php      # Lịch trình mẫu cố định sáng/chiều T2–T6
-│       ├── TripInstance.php      # Chuyến xe cụ thể & logic PostGIS ST_DWithin
-│       └── Booking.php           # Trạng thái ghép chuyến (requested, accepted, completed)
-├── database/
-│   ├── migrations/               # Schema PostGIS geometry, quan hệ dữ liệu
-│   └── seeders/                  # Dữ liệu tài xế, chuyến xe và tài khoản Admin mẫu
-├── resources/views/
-│   └── welcome.blade.php         # Landing page phong cách roomio neo-brutalist
-└── routes/
-    ├── api.php                   # Endpoints tra cứu hành lang và kết nối
-    └── web.php                   # Routes điều hướng giao diện
+carpooling/
+├── apps/
+│   ├── api/                          # BACKEND: Laravel 13 (PHP 8.5)
+│   │   ├── app/
+│   │   │   ├── Filament/Resources/   # Bảng điều khiển quản trị vận hành (Filament v5)
+│   │   │   ├── Http/Controllers/Api/ # REST API (Search, Trips, Bookings, Stats, Auth)
+│   │   │   └── Models/               # Eloquent Models (TripInstance, Booking, Vehicle...)
+│   │   ├── database/                 # Migrations không gian PostGIS, Seeders mẫu
+│   │   ├── routes/
+│   │   │   ├── api.php               # REST API endpoints v1
+│   │   │   └── web.php               # Web routes & Filament hooks
+│   │   ├── composer.json             # PHP Dependencies (Sanctum, Horizon, Filament...)
+│   │   └── artisan
+│   │
+│   └── web/                          # FRONTEND: ReactJS (Vite + TypeScript)
+│       ├── src/
+│       │   ├── pages/                # HomePage, LoginPage, DashboardPage
+│       │   ├── lib/                  # REST API Client, Types, Auth session
+│       │   ├── index.css             # Roomio Neo-Brutalist Design System (CSS Tokens)
+│       │   ├── App.tsx               # Client-side Routing (React Router)
+│       │   └── main.tsx
+│       ├── package.json              # React Dependencies
+│       ├── vite.config.ts            # Proxy /api -> Laravel Backend
+│       └── index.html
+│
+├── docs/                             # Báo cáo, tài liệu nghiên cứu đề tài
+│   └── tong-hop-carpooling-viet-nam.docx
+├── package.json                      # Monorepo Workspace Orchestration (npm workspaces)
+├── docker-compose.yml                # Dịch vụ hạ tầng (PostgreSQL 16 PostGIS, Redis)
+├── README.md
+└── .gitignore
 ```
+
+---
+
+## 3. Công nghệ sử dụng (Technology Stack)
+
+| Thành phần | Công nghệ | Chi tiết kỹ thuật |
+| :--- | :--- | :--- |
+| **Backend API** | **Laravel 13.x (PHP 8.5+)** | REST API chuẩn, Eloquent ORM, Laravel Sanctum Token Auth |
+| **Frontend Web** | **React 19 + Vite + TypeScript** | React Router v7, Client-side SPA, proxy API tự động |
+| **Spatial Database** | **PostgreSQL 16 + PostGIS** | Thuật toán quét hành lang `ST_DWithin` & kiểm tra chiều `ST_LineLocatePoint` (hỗ trợ SQLite cho Local Dev) |
+| **Admin Operations** | **Filament v5** | Quản trị hồ sơ tài xế, phương tiện, chuyến xe và xử lý tố cáo |
+| **Background Queues** | **Laravel Horizon + Redis** | Giám sát hàng đợi thông báo và khớp nối chuyến đi |
+| **Design System** | **Roomio Neo-Brutalist** | Viền đen sắc nét, bóng đổ cứng `2px 2px 0px -1px #000`, nút bấm không icon có hiệu ứng hover radial wipe |
+
+---
+
+## 4. Thuật toán Ghép Tuyến Hành lang (Corridor Search)
+
+Khác với taxi công nghệ tìm theo bán kính tròn, hệ thống sử dụng thuật toán quét **dọc trục đường xe chạy**:
+
+```sql
+-- 1. Tìm các chuyến xe có lộ trình đi qua điểm đón & trả trong phạm vi 2km
+SELECT * FROM trip_instances
+WHERE ST_DWithin(route_line::geography, ST_SetSRID(ST_Point(pickup_lng, pickup_lat), 4326)::geography, 2000)
+  AND ST_DWithin(route_line::geography, ST_SetSRID(ST_Point(dropoff_lng, dropoff_lat), 4326)::geography, 2000)
+  -- 2. Đảm bảo điểm đón diễn ra TRƯỚC điểm trả trên cùng chiều di chuyển
+  AND ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(pickup_lng, pickup_lat), 4326)) 
+    < ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(dropoff_lng, dropoff_lat), 4326));
+```
+
+---
+
+## 5. Hướng dẫn Khởi chạy (Local Development)
+
+### Yêu cầu môi trường:
+- **Node.js** >= 20.x & **npm**
+- **PHP** >= 8.5 & **Composer**
+
+### 1. Cài đặt toàn bộ Monorepo:
+
+Tại thư mục gốc dự án:
+```bash
+# Cài đặt node dependencies cho toàn bộ workspace
+npm install
+
+# Cài đặt PHP dependencies cho backend
+cd apps/api && composer install && cd ../..
+```
+
+### 2. Thiết lập CSDL Backend:
+
+```bash
+cd apps/api
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+cd ../..
+```
+
+### 3. Khởi chạy toàn bộ dự án (1 lệnh duy nhất):
+
+Tại thư mục gốc dự án:
+```bash
+npm run dev
+```
+> Lệnh này sẽ tự động khởi động đồng thời:
+> - **Backend Laravel API** tại: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+> - **Frontend React Web** tại: [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 6. Danh sách Tài khoản Thử nghiệm & Đường dẫn
+
+### 🌐 Frontend (React App - `http://localhost:5173`):
+- **Trang chủ & Mô phỏng ghép hành lang**: `/`
+- **Đăng nhập**: `/login`
+- **Bảng điều khiển (Dashboard & Form Roomio)**: `/dashboard`
+
+### ⚙️ Backend (Laravel - `http://127.0.0.1:8000`):
+- **Filament Admin Ops**: `/admin`
+- **Laravel Horizon Dashboard**: `/horizon`
+
+### 👤 Tài khoản mẫu:
+| Vai trò | Email | Mật khẩu |
+| :--- | :--- | :--- |
+| **Quản trị viên (Admin)** | `admin@carpooling.vn` | `password` |
+| **Chủ xe (Driver)** | `driver@carpooling.vn` | `password` |
+| **Hành khách (Passenger)** | `passenger@carpooling.vn` | `password` |
 
 ---
 
 ## 7. Giấy phép (License)
 
-Dự án được phát triển dưới giấy phép mã nguồn mở [MIT License](LICENSE).
+Dự án phục vụ mục đích học tập, nghiên cứu khoa học và phát triển cộng đồng dưới giấy phép [MIT License](LICENSE).
