@@ -35,36 +35,33 @@ export const HomePage: React.FC = () => {
           </div>
         </header>
 
-        {/* Hero Section */}
-        <section style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3rem auto' }}>
-          <h1 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.1rem)', fontWeight: 900, lineHeight: 1.15, letterSpacing: '-1px', marginBottom: '1.25rem' }}>
+        {/* Hero Section (Left-aligned Roomio style) */}
+        <section className="hero">
+          <div className="corridor-pill">
+            <span className="pulse-dot"></span>
+            <span>Thuật toán Ghép hành lang PostGIS — Không gọi Google Distance Matrix</span>
+          </div>
+
+          <h1>
             Tiện đường thì đi chung,<br />tiền xăng tùy lòng.
           </h1>
 
-          <p style={{ fontSize: '1rem', color: '#3F3F46', lineHeight: 1.6, fontWeight: 500, marginBottom: '1.5rem' }}>
+          <p className="hero-desc">
             Cùng đi làm sáng chiều trên một trục đường thì rủ nhau đi chung xe cho đỡ buồn ngủ và đỡ kẹt xe. 
             Nền tảng <strong>không thu bất kỳ đồng phí nào</strong> và <strong>không giao dịch tiền trên app</strong>. 
             Tiền xăng cộ hay cà phê ăn sáng hai bên tự tính với nhau, tùy lòng cảm ơn chủ xe.
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.65rem' }}>
-            <div className="badge-tag badge-green" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem' }}>
-              100% Phi thương mại
-            </div>
-            <div className="badge-tag" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem' }}>
-              Ghép hành lang PostGIS
-            </div>
-            <div className="badge-tag" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem', background: '#FFFFFF' }}>
-              Laravel 13 API + React Vite
-            </div>
-            <div className="badge-tag" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem', background: '#FFFFFF' }}>
-              Cộng đồng dân văn phòng
-            </div>
+          <div className="tech-chips">
+            <span className="chip chip-green">100% Phi thương mại</span>
+            <span className="chip chip-blue">Ghép hành lang PostGIS</span>
+            <span className="chip">Laravel 13 API + React Vite</span>
+            <span className="chip">Cộng đồng dân văn phòng</span>
           </div>
         </section>
 
         {/* Main Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+        <div className="grid-2">
           {/* Left: Corridor Matching Window */}
           <div className="roomio-window">
             <div className="roomio-window-bar">

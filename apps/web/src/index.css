@@ -1,9 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSansOTF/GoogleSans-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
 
 :root {
+  --font-sans: 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Google Sans', ui-monospace, SFMono-Regular, monospace;
+
+  /* roomio exact offset shadows */
   --shadow-primary: 2px 2px 0px -1px #000000;
   --shadow-secondary: 2px 2px 0px -1px #000000;
-  --color-primary-blue: #BFDBFE;
+  --shadow-secondary-opposite: -2px 2px 0px -1px #000000;
+  --tap-depth: 1px;
+
+  /* roomio exact colors */
+  --color-blue-150: rgb(205, 227, 254);
+  --color-primary-blue: rgb(191, 219, 254);
+  --color-primary-dark: rgb(96, 165, 250);
+  --color-primary-light: rgb(219, 234, 254);
+  --color-primary-lighter: rgb(239, 246, 255);
+  --color-primary-medium: rgb(191, 219, 254);
   --color-primary-blue-hover: #93C5FD;
 }
 
@@ -15,12 +69,13 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-sans);
   background-color: #FFFFFF;
   color: #000000;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Roomio Dot-Grid Background */
@@ -44,9 +99,9 @@ body {
 
 /* Container */
 .container {
-  max-width: 1040px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.25rem 4rem;
 }
 
 @media (max-width: 640px) {
@@ -60,7 +115,109 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #000000;
+}
+
+/* Roomio Left-Aligned Hero */
+.hero {
+  padding: 1.5rem 0 3rem;
+  max-width: 860px;
+  text-align: left;
+}
+
+.corridor-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid #000000;
+  background-color: var(--color-primary-lighter);
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: var(--shadow-primary);
+  margin-bottom: 1.5rem;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  animation: roomio-pulse 2s infinite;
+}
+
+@keyframes roomio-pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+h1 {
+  font-size: 3.25rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  color: #3F3F46;
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 720px;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-bottom: 2.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 2px solid #000000;
+  background-color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: var(--shadow-primary);
+}
+
+.chip-blue {
+  background-color: var(--color-primary-lighter);
+}
+
+.chip-green {
+  background-color: #DCFCE7;
+}
+
+/* Grid Layout */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 960px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  h1 {
+    font-size: 2.35rem;
+  }
 }
 
 .brand-link {
