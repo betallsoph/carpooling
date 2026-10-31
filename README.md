@@ -1,58 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# carpooling.vn
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Nền tảng kết nối đi chung xe văn phòng 100% phi thương mại tại Việt Nam.**  
+> *"Tiện đường thì đi chung, tiền xăng tùy lòng."*
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 1. Giới thiệu dự án
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+`carpooling.vn` là giải pháp công nghệ kết nối các nhân viên văn phòng, người đi làm có cùng cung đường di chuyển hàng ngày (commuter carpooling). Hệ thống giúp tận dụng các ghế trống trên ô tô cá nhân vào giờ cao điểm sáng và chiều, giảm thiểu ùn tắc giao thông, tiết kiệm chi phí nhiên liệu và bảo vệ môi trường.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Tinh thần & Pháp lý cốt lõi:
+- **100% Phi thương mại**: Nền tảng **không thu phí trung gian, không ấn định giá vé, không mở ví điện tử giữ tiền**.
+- **Tiền xăng tùy lòng**: Người đi nhờ tự nguyện chia sẻ một phần chi phí nhiên liệu, phí cầu đường (hoặc mời cà phê) trực tiếp với chủ xe lúc đi chung.
+- **An tâm pháp lý**: Hoàn toàn là hành vi đi nhờ xe tự nguyện giữa các cá nhân công sở, không phát sinh giao dịch kinh doanh vận tải hành khách trái phép theo quy định pháp luật Việt Nam.
+- **Văn hóa văn minh**: Tôn trọng không gian riêng của chủ xe, có mặt đúng giờ hẹn và giữ gìn xe sạch sẽ.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 2. Công nghệ sử dụng (Tech Stack)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Ngôn ngữ & Runtime**: PHP 8.5+
+- **Backend Framework**: Laravel 13.x
+- **Bảng điều khiển quản trị (Admin Panel)**: [Filament v5](https://filamentphp.com) (quản lý tài xế, phương tiện, chuyến đi, báo cáo)
+- **Cơ sở dữ liệu & Không gian địa lý (GIS)**: 
+  - **PostgreSQL 16 + PostGIS**: Xử lý dữ liệu không gian, tuyến đường xe chạy dạng `Geometry(LineString, 4326)`.
+  - Hỗ trợ fallback **SQLite** cho môi trường phát triển giao diện nhanh (Local UI Dev).
+- **Hàng đợi & Giám sát**: Laravel Horizon + Redis.
+- **Xác thực API**: Laravel Sanctum (Token-based authentication).
+- **Giao diện người dùng (UI)**: Neo-brutalist Design System kế thừa phong cách `roomio` (viền đen sắc nét, bóng đổ cứng `2px 2px 0px -1px #000`, hiệu ứng tương tác mượt mà, hoàn toàn không dùng emoji).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 3. Thuật toán ghép hành lang (Corridor Matching)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Khác với các ứng dụng taxi/xe ôm công nghệ tìm tài xế theo bán kính tròn xung quanh điểm đón, `carpooling.vn` sử dụng thuật toán **ghép tuyến hành lang (Corridor Search)** với PostGIS:
 
-```bash
-composer require laravel/boost --dev
+1. **Quét độ lệch hành lang (`ST_DWithin`)**: Tìm các chuyến xe có lộ trình đi qua điểm đón (pickup) và điểm trả (dropoff) của hành khách trong phạm vi cho phép (mặc định ≤ 2km):
+   ```sql
+   ST_DWithin(route_line::geography, ST_SetSRID(ST_Point(lon, lat), 4326)::geography, 2000)
+   ```
+2. **Kiểm tra đúng chiều di chuyển (`ST_LineLocatePoint`)**: Xác định vị trí tương đối trên tuyến đường để đảm bảo điểm đón phải diễn ra **trước** điểm trả trên cùng chiều xe chạy:
+   ```sql
+   ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(p_lon, p_lat), 4326)) 
+   < 
+   ST_LineLocatePoint(route_line, ST_SetSRID(ST_Point(d_lon, d_lat), 4326))
+   ```
 
-php artisan boost:install
+---
+
+## 4. Cài đặt và Chạy thử (Local Development)
+
+### Yêu cầu tiên quyết:
+- PHP >= 8.5
+- Composer >= 2.x
+- Docker & Docker Compose (tùy chọn khi cần chạy PostGIS + Redis)
+
+### Các bước cài đặt:
+
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/betallsoph/carpooling.git
+   cd carpooling
+   ```
+
+2. **Cài đặt các gói phụ thuộc (Dependencies):**
+   ```bash
+   composer install
+   ```
+
+3. **Thiết lập biến môi trường:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Chạy Migration và Seed dữ liệu mẫu:**
+   - *Chế độ SQLite (nhanh, kiểm thử giao diện & API cơ bản):*
+     ```bash
+     touch database/database.sqlite
+     php artisan migrate --seed
+     ```
+   - *Chế độ Docker PostGIS & Redis:*
+     ```bash
+     docker compose up -d
+     php artisan migrate --seed
+     ```
+
+5. **Khởi chạy ứng dụng:**
+   ```bash
+   php artisan serve
+   ```
+   Ứng dụng sẽ chạy tại: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+---
+
+## 5. Tài khoản & Địa chỉ truy cập
+
+- **Trang chủ & Mô phỏng ghép xe**: `http://127.0.0.1:8000`
+- **Bảng điều khiển quản trị (Filament Admin)**: `http://127.0.0.1:8000/admin`
+  - **Email**: `admin@carpooling.vn`
+  - **Mật khẩu**: `password`
+- **Giám sát hàng đợi (Laravel Horizon)**: `http://127.0.0.1:8000/horizon`
+
+---
+
+## 6. Cấu trúc thư mục trọng tâm
+
+```text
+├── app/
+│   ├── Filament/Resources/       # Quản trị tài xế, chuyến đi, xe, báo cáo vi phạm
+│   ├── Http/Controllers/Api/     # REST API (tìm chuyến xe, gửi lời chào hẹn đi cùng)
+│   └── Models/
+│       ├── DriverProfile.php     # Hồ sơ bằng lái, giấy tờ xe
+│       ├── TripTemplate.php      # Lịch trình mẫu cố định sáng/chiều T2–T6
+│       ├── TripInstance.php      # Chuyến xe cụ thể & logic PostGIS ST_DWithin
+│       └── Booking.php           # Trạng thái ghép chuyến (requested, accepted, completed)
+├── database/
+│   ├── migrations/               # Schema PostGIS geometry, quan hệ dữ liệu
+│   └── seeders/                  # Dữ liệu tài xế, chuyến xe và tài khoản Admin mẫu
+├── resources/views/
+│   └── welcome.blade.php         # Landing page phong cách roomio neo-brutalist
+└── routes/
+    ├── api.php                   # Endpoints tra cứu hành lang và kết nối
+    └── web.php                   # Routes điều hướng giao diện
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 7. Giấy phép (License)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Dự án được phát triển dưới giấy phép mã nguồn mở [MIT License](LICENSE).
