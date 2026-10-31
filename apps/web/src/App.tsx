@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { DashboardPage } from './pages/DashboardPage';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { DashboardLayout } from './layouts/DashboardLayout';
+import { BookingsPage } from './pages/dashboard/BookingsPage';
+import { CreateTripPage } from './pages/dashboard/CreateTripPage';
+import { DashboardOverviewPage } from './pages/dashboard/DashboardOverviewPage';
+import { MapSearchPage } from './pages/dashboard/MapSearchPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 
@@ -25,7 +29,16 @@ export const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+
+        {/* Dedicated Pages for each sidebar section */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardOverviewPage />} />
+          <Route path="create-trip" element={<CreateTripPage />} />
+          <Route path="bookings" element={<BookingsPage />} />
+          <Route path="map-search" element={<MapSearchPage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
