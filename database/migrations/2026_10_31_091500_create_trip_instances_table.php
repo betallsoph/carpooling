@@ -51,9 +51,11 @@ return new class extends Migration
             $table->index(['date', 'status']);
         });
 
-        DB::statement('CREATE INDEX trip_instances_route_line_gist ON trip_instances USING GIST (route_line);');
-        DB::statement('CREATE INDEX trip_instances_origin_point_gist ON trip_instances USING GIST (origin_point);');
-        DB::statement('CREATE INDEX trip_instances_destination_point_gist ON trip_instances USING GIST (destination_point);');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('CREATE INDEX trip_instances_route_line_gist ON trip_instances USING GIST (route_line);');
+            DB::statement('CREATE INDEX trip_instances_origin_point_gist ON trip_instances USING GIST (origin_point);');
+            DB::statement('CREATE INDEX trip_instances_destination_point_gist ON trip_instances USING GIST (destination_point);');
+        }
     }
 
     public function down(): void

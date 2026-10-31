@@ -40,8 +40,10 @@ return new class extends Migration
             $table->index(['passenger_id', 'status']);
         });
 
-        DB::statement('CREATE INDEX bookings_pickup_point_gist ON bookings USING GIST (pickup_point);');
-        DB::statement('CREATE INDEX bookings_dropoff_point_gist ON bookings USING GIST (dropoff_point);');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('CREATE INDEX bookings_pickup_point_gist ON bookings USING GIST (pickup_point);');
+            DB::statement('CREATE INDEX bookings_dropoff_point_gist ON bookings USING GIST (dropoff_point);');
+        }
     }
 
     public function down(): void

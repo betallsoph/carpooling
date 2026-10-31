@@ -40,9 +40,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('CREATE INDEX trip_templates_route_line_gist ON trip_templates USING GIST (route_line);');
-        DB::statement('CREATE INDEX trip_templates_origin_point_gist ON trip_templates USING GIST (origin_point);');
-        DB::statement('CREATE INDEX trip_templates_destination_point_gist ON trip_templates USING GIST (destination_point);');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('CREATE INDEX trip_templates_route_line_gist ON trip_templates USING GIST (route_line);');
+            DB::statement('CREATE INDEX trip_templates_origin_point_gist ON trip_templates USING GIST (origin_point);');
+            DB::statement('CREATE INDEX trip_templates_destination_point_gist ON trip_templates USING GIST (destination_point);');
+        }
     }
 
     public function down(): void

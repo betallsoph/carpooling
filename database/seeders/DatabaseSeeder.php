@@ -99,14 +99,22 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $template->origin_point = DB::raw("ST_SetSRID(ST_MakePoint(106.6710, 11.0535), 4326)");
-        $template->destination_point = DB::raw("ST_SetSRID(ST_MakePoint(106.7032, 10.7769), 4326)");
-        $template->route_line = DB::raw("ST_SetSRID(ST_MakeLine(ARRAY[
-            ST_MakePoint(106.6710, 11.0535),
-            ST_MakePoint(106.7025, 10.9021),
-            ST_MakePoint(106.7118, 10.8012),
-            ST_MakePoint(106.7032, 10.7769)
-        ]), 4326)");
+        $isPgsql = DB::getDriverName() === 'pgsql';
+
+        $template->origin_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.6710, 11.0535), 4326)")
+            : 'POINT(106.6710 11.0535)';
+        $template->destination_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.7032, 10.7769), 4326)")
+            : 'POINT(106.7032 10.7769)';
+        $template->route_line = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakeLine(ARRAY[
+                ST_MakePoint(106.6710, 11.0535),
+                ST_MakePoint(106.7025, 10.9021),
+                ST_MakePoint(106.7118, 10.8012),
+                ST_MakePoint(106.7032, 10.7769)
+            ]), 4326)")
+            : 'LINESTRING(106.6710 11.0535, 106.7025 10.9021, 106.7118 10.8012, 106.7032 10.7769)';
         $template->save();
 
         // 4. Tạo Chuyến đi thực tế (Trip Instance) cho ngày làm việc kế tiếp
@@ -131,14 +139,20 @@ class DatabaseSeeder extends Seeder
             'current_cost_per_person' => 38000, // (34.5*1800 + 15000) / (1 lái + 1 khách) = 77100 / 2 ≈ 38k
         ]);
 
-        $instance->origin_point = DB::raw("ST_SetSRID(ST_MakePoint(106.6710, 11.0535), 4326)");
-        $instance->destination_point = DB::raw("ST_SetSRID(ST_MakePoint(106.7032, 10.7769), 4326)");
-        $instance->route_line = DB::raw("ST_SetSRID(ST_MakeLine(ARRAY[
-            ST_MakePoint(106.6710, 11.0535),
-            ST_MakePoint(106.7025, 10.9021),
-            ST_MakePoint(106.7118, 10.8012),
-            ST_MakePoint(106.7032, 10.7769)
-        ]), 4326)");
+        $instance->origin_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.6710, 11.0535), 4326)")
+            : 'POINT(106.6710 11.0535)';
+        $instance->destination_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.7032, 10.7769), 4326)")
+            : 'POINT(106.7032 10.7769)';
+        $instance->route_line = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakeLine(ARRAY[
+                ST_MakePoint(106.6710, 11.0535),
+                ST_MakePoint(106.7025, 10.9021),
+                ST_MakePoint(106.7118, 10.8012),
+                ST_MakePoint(106.7032, 10.7769)
+            ]), 4326)")
+            : 'LINESTRING(106.6710 11.0535, 106.7025 10.9021, 106.7118 10.8012, 106.7032 10.7769)';
         $instance->save();
 
         // 5. Tạo Hành khách (Passenger)
@@ -171,8 +185,12 @@ class DatabaseSeeder extends Seeder
             'note' => 'Em đứng ngay cổng vào bãi đỗ xe Lotte Mart ạ',
             'accepted_at' => now(),
         ]);
-        $booking->pickup_point = DB::raw("ST_SetSRID(ST_MakePoint(106.7025, 10.9021), 4326)");
-        $booking->dropoff_point = DB::raw("ST_SetSRID(ST_MakePoint(106.7118, 10.8012), 4326)");
+        $booking->pickup_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.7025, 10.9021), 4326)")
+            : 'POINT(106.7025 10.9021)';
+        $booking->dropoff_point = $isPgsql 
+            ? DB::raw("ST_SetSRID(ST_MakePoint(106.7118, 10.8012), 4326)")
+            : 'POINT(106.7118 10.8012)';
         $booking->save();
 
         // Sinh bản ghi VietQR chia sẻ chi phí trực tiếp cho chủ xe

@@ -499,11 +499,11 @@
             </a>
 
             <div class="header-actions">
-                <a href="/horizon" target="_blank" class="roomio-button-white">
-                    <span>Hàng đợi Horizon</span>
+                <a href="/login" class="roomio-button-white">
+                    <span>Đăng nhập</span>
                 </a>
-                <a href="/admin" target="_blank" class="roomio-button">
-                    <span>Trang quản trị (Admin)</span>
+                <a href="/dashboard" class="roomio-button">
+                    <span>Bảng điều khiển</span>
                 </a>
             </div>
         </header>
@@ -699,8 +699,11 @@
                 <p style="font-size: 0.8rem; color: #52525B;">Email: <strong>admin@carpooling.vn</strong> · Mật khẩu: <strong>password</strong></p>
             </div>
             <div style="display: flex; gap: 0.75rem;">
-                <a href="/admin/login" target="_blank" class="roomio-button">
-                    <span>Mở màn hình đăng nhập Admin</span>
+                <a href="/login" class="roomio-button-white">
+                    <span>Đăng nhập</span>
+                </a>
+                <a href="/dashboard" class="roomio-button">
+                    <span>Mở Bảng điều khiển (Dashboard)</span>
                 </a>
             </div>
         </div>
