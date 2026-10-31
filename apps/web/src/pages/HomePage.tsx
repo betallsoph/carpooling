@@ -37,11 +37,6 @@ export const HomePage: React.FC = () => {
 
         {/* Hero Section (Left-aligned Roomio style) */}
         <section className="hero">
-          <div className="corridor-pill">
-            <span className="pulse-dot"></span>
-            <span>Thuật toán Ghép hành lang PostGIS — Không gọi Google Distance Matrix</span>
-          </div>
-
           <h1>
             Tiện đường thì đi chung,<br />tiền xăng tùy lòng.
           </h1>
@@ -54,7 +49,6 @@ export const HomePage: React.FC = () => {
 
           <div className="tech-chips">
             <span className="chip chip-green">100% Phi thương mại</span>
-            <span className="chip chip-blue">Ghép hành lang PostGIS</span>
             <span className="chip">Laravel 13 API + React Vite</span>
             <span className="chip">Cộng đồng dân văn phòng</span>
           </div>
