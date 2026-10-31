@@ -221,3 +221,50 @@ export async function createTrip(data: {
   const json = await res.json();
   return json.data;
 }
+
+export interface SearchResultTrip {
+  id: number;
+  date: string;
+  departure_time: string;
+  origin: { name: string; address?: string };
+  destination: { name: string; address?: string };
+  total_distance_km: number;
+  estimated_duration_minutes: number;
+  available_seats: number;
+  estimated_cost_per_person?: number;
+  driver: {
+    name: string;
+    avatar_url?: string;
+    rating_avg: number;
+    rating_count: number;
+    rides_completed: number;
+  };
+  vehicle: {
+    make: string;
+    model: string;
+    color?: string;
+    plate_number: string;
+  };
+}
+
+export async function searchTrips(params: {
+  pickup_lng: number;
+  pickup_lat: number;
+  dropoff_lng: number;
+  dropoff_lat: number;
+  seats?: number;
+  buffer_meters?: number;
+}): Promise<{ status: string; count: number; data: SearchResultTrip[] }> {
+  const query = new URLSearchParams({
+    pickup_lng: String(params.pickup_lng),
+    pickup_lat: String(params.pickup_lat),
+    dropoff_lng: String(params.dropoff_lng),
+    dropoff_lat: String(params.dropoff_lat),
+    buffer_meters: String(params.buffer_meters || 2000),
+    seats: String(params.seats || 1),
+  });
+
+  const res = await fetch(`${API_BASE}/trips/search?${query.toString()}`);
+  if (!res.ok) throw new Error('Search failed');
+  return res.json();
+}

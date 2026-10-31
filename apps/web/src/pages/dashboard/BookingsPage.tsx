@@ -148,7 +148,7 @@ export const BookingsPage: React.FC = () => {
               {filteredBookings.map(booking => {
                 const isPending = booking.status === 'requested';
                 const isAccepted = booking.status === 'accepted';
-                const passengerName = booking.user?.name || 'Đồng nghiệp xin ghép xe';
+                const passengerName = booking.passenger?.name || 'Đồng nghiệp xin ghép xe';
 
                 return (
                   <div key={booking.id} className="trip-item">
@@ -168,7 +168,7 @@ export const BookingsPage: React.FC = () => {
                             {passengerName}
                           </span>
                           <span style={{ fontSize: '0.75rem', color: '#71717A', fontWeight: 600 }}>
-                            · {booking.user?.phone || '0908 123 456'}
+                            · {booking.passenger?.phone || '0908 123 456'}
                           </span>
                         </div>
                         <div style={{ fontSize: '0.75rem', color: '#52525B', fontWeight: 600 }}>
@@ -227,13 +227,13 @@ export const BookingsPage: React.FC = () => {
                       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#4338CA' }}>Đón:</span>
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#18181B' }}>
-                          {booking.pickup_point?.name || 'Điểm hẹn đón trên trục đường'}
+                          {booking.pickup_name || 'Điểm hẹn đón trên trục đường'}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#15803D' }}>Trả:</span>
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#18181B' }}>
-                          {booking.dropoff_point?.name || 'Tòa nhà văn phòng / Công ty'}
+                          {booking.dropoff_name || 'Tòa nhà văn phòng / Công ty'}
                         </span>
                       </div>
                     </div>
