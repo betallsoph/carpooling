@@ -30,19 +30,10 @@
 
 ## Techstack
 
-[![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
-[![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
-[![Sanctum](https://img.shields.io/badge/Sanctum-token%20auth-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/docs/sanctum)
-[![Filament](https://img.shields.io/badge/Filament-v5-FDAE4B?style=flat-square&logo=laravel&logoColor=white)](https://filamentphp.com)
-[![Horizon](https://img.shields.io/badge/Horizon-queues-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/docs/horizon)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![PostGIS](https://img.shields.io/badge/PostGIS-corridor%20search-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://postgis.net/)
-[![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=flat-square&logo=redis&logoColor=white)](https://redis.io/)
-[![React](https://img.shields.io/badge/React-19-087EA4?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-
-Backend Laravel 13, frontend React 19, dữ liệu không gian PostgreSQL 16 + PostGIS. Bảng chi tiết nằm ở mục 3.
+[![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
+[![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-087EA4?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 ---
 
